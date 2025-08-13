@@ -1,17 +1,16 @@
 package com.xircle.userservice.application
 
+import com.xircle.common.event.UserCreationEventDto
 import com.xircle.common.exception.NotFoundException
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.userservice.application.dto.MemberDto
-import com.xircle.common.event.UserCreationEventDto
-import com.xircle.common.util.StringUtil.Companion.CREATE_USER_TOPIC
 import com.xircle.userservice.domain.integration.reader.MemberReader
 import com.xircle.userservice.domain.integration.store.MemberStore
 import com.xircle.userservice.domain.model.Interest
 import com.xircle.userservice.domain.model.Member
 import com.xircle.userservice.domain.model.MemberRole
-import com.xircle.userservice.infrastructure.publisher.MessagePublisher
 import jakarta.transaction.Transactional
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -20,7 +19,7 @@ class MemberAuthService(
     private val memberStore: MemberStore,
     private val memberReader: MemberReader,
     private val passwordEncoder: PasswordEncoder,
-    private val messagePublisher: MessagePublisher
+    private val eventPublisher: ApplicationEventPublisher
 ) {
     @Transactional
     fun signUp(memberDto: MemberDto) {
@@ -53,7 +52,7 @@ class MemberAuthService(
             member.addInterest(Interest(it))
         }
         memberStore.saveMember(member)
-        messagePublisher.publish(CREATE_USER_TOPIC, UserCreationEventDto(member.id!!))
+        eventPublisher.publishEvent(UserCreationEventDto(member.id!!))
     }
 
     @Transactional
