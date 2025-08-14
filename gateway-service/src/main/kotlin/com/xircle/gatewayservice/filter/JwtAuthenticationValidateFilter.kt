@@ -15,6 +15,12 @@ class JwtAuthenticationValidateFilter(
     private val tokenService: TokenService,
     private val userServiceClientAdapter: UserServiceClientAdapter,
 ) : WebFilter {
+    companion object {
+        private const val AUTH_HEADER = "Authorization"
+        private const val HEADER_NAME = "memberId"
+        private const val CLAIM_ID = "id"
+    }
+
     private val publicPaths = arrayOf("/user-service/member", "/user-service/login")
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
@@ -26,7 +32,7 @@ class JwtAuthenticationValidateFilter(
             }
         }
 
-        val token: String? = request.headers.getFirst("Authorization")
+        val token: String? = request.headers.getFirst(AUTH_HEADER)
         if (token.isNullOrEmpty()) {
             return ResponseUtil.createAuthenticationErrorResponse(exchange)
         }
@@ -36,12 +42,12 @@ class JwtAuthenticationValidateFilter(
                 tokenService.decodeToken(token)
             }
             .flatMap { decodedToken ->
-                val memberId = decodedToken.getClaim("id").asLong()
+                val memberId = decodedToken.getClaim(CLAIM_ID).asLong()
                 Mono.fromFuture(userServiceClientAdapter.getMemberInfo(memberId.toLong()))
             }
             .flatMap { member ->
                 val modifiedRequest = exchange.request.mutate()
-                    .header("memberId", member.id.toString())
+                    .header(HEADER_NAME, member.id.toString())
                     .build()
                 val modifiedExchange = exchange.mutate()
                     .request(modifiedRequest)
