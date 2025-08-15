@@ -7,7 +7,6 @@ import com.xircle.chatservice.application.dto.SendChatMessageDto
 import com.xircle.chatservice.domain.command.ChatMessageCommand
 import com.xircle.chatservice.domain.command.ChatRoomCommand
 import com.xircle.chatservice.domain.event.SendPrivateChatEvent
-import com.xircle.chatservice.domain.integration.publisher.ChatPublisher
 import com.xircle.chatservice.domain.integration.reader.ChatReader
 import com.xircle.chatservice.domain.integration.store.ChatStore
 import com.xircle.chatservice.domain.model.ChatMessage
@@ -22,7 +21,6 @@ import java.time.LocalDateTime
 class ChatService(
     private val chatStore: ChatStore,
     private val chatReader: ChatReader,
-    private val chatPublisher: ChatPublisher,
     private val userServiceClient: UserServiceClient,
     private val publisher: ApplicationEventPublisher
 ) {
@@ -40,7 +38,7 @@ class ChatService(
         )
         chatStore.saveChatRoom(memberChatRoom)
 
-        chatPublisher.publishCreatedChatRoom(
+        publisher.publishEvent(
             ChatRoomCommand(
                 sessionId = createChatRoomDto.sessionId,
                 hostId = createChatRoomDto.hostId,
@@ -64,7 +62,7 @@ class ChatService(
         chatRoom.lastMessageId = chatMessage.id
         chatStore.updateChatRoom(chatRoom)
 
-        chatPublisher.publishChatMessage(
+        publisher.publishEvent(
             ChatMessageCommand(
                 roomId = sendChatMessageDto.roomId,
                 sessionId = sendChatMessageDto.sessionId,
