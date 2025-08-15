@@ -8,12 +8,12 @@ import com.xircle.chatservice.domain.command.ChatMessageCommand
 import com.xircle.chatservice.domain.command.ChatRoomCommand
 import com.xircle.chatservice.domain.event.SendPrivateChatEvent
 import com.xircle.chatservice.domain.integration.publisher.ChatPublisher
-import com.xircle.chatservice.domain.integration.publisher.MessagePublisher
 import com.xircle.chatservice.domain.integration.reader.ChatReader
 import com.xircle.chatservice.domain.integration.store.ChatStore
 import com.xircle.chatservice.domain.model.ChatMessage
 import com.xircle.chatservice.domain.model.ChatRoom
 import com.xircle.chatservice.infrastructure.api.client.UserServiceClient
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -23,8 +23,8 @@ class ChatService(
     private val chatStore: ChatStore,
     private val chatReader: ChatReader,
     private val chatPublisher: ChatPublisher,
-    private val messagePublisher: MessagePublisher,
-    private val userServiceClient: UserServiceClient
+    private val userServiceClient: UserServiceClient,
+    private val publisher: ApplicationEventPublisher
 ) {
     @Transactional
     fun createRoom(createChatRoomDto: CreateChatRoomDto): ChatRoom {
@@ -75,10 +75,7 @@ class ChatService(
             )
         )
 
-        val destination = chatReader.findReceiverDestination(sendChatMessageDto.receiverId)
-
-        messagePublisher.publish(
-            "${destination}-chat",
+        publisher.publishEvent(
             SendPrivateChatEvent(
                 id = chatMessage.id!!,
                 roomId = sendChatMessageDto.roomId,
@@ -87,6 +84,7 @@ class ChatService(
                 receiverId = sendChatMessageDto.receiverId
             )
         )
+
         return chatMessage
     }
 
