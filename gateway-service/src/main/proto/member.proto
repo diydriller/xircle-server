@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_outer_classname = "MemberProfileProto";
+option java_package = "com.xircle.userservice.application.grpc.proto";
+
+package com.xircle.userservice;
+
+message GetMemberProfileListRequest {
+  repeated int64 userId = 1;
+}
+
+message GetMemberProfileListResponse {
+  repeated GetMemberProfileInfo info = 1;
+}
+
+message GetMemberProfileInfo {
+  int64 id = 1;
+  string email = 2;
+  string profileImage = 3;
+  string nickname = 4;
+}
+
+message GetMemberProfileRequest {
+  int64 userId = 1;
+}
+
+message GetMemberProfileResponse {
+  GetMemberProfileInfo info = 1;
+}
+
+service GetMemberProfileService {
+  rpc GetMemberProfileListCall (GetMemberProfileListRequest) returns (GetMemberProfileListResponse) {}
+  rpc GetMemberProfileCall (GetMemberProfileRequest) returns (GetMemberProfileResponse) {}
+}

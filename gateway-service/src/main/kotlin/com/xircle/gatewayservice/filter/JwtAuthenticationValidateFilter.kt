@@ -43,7 +43,7 @@ class JwtAuthenticationValidateFilter(
             }
             .flatMap { decodedToken ->
                 val memberId = decodedToken.getClaim(CLAIM_ID).asLong()
-                Mono.fromFuture(userServiceClientAdapter.getMemberInfo(memberId.toLong()))
+                userServiceClientAdapter.getMemberInfo(memberId.toLong())
             }
             .flatMap { member ->
                 val modifiedRequest = exchange.request.mutate()
