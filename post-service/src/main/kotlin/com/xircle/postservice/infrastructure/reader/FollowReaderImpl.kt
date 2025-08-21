@@ -1,14 +1,21 @@
 package com.xircle.postservice.infrastructure.reader
 
+import com.xircle.followservice.application.grpc.proto.GetFollowerRequest
+import com.xircle.followservice.application.grpc.proto.GetFollowerServiceGrpc
 import com.xircle.postservice.domain.integration.reader.FollowReader
-import com.xircle.postservice.infrastructure.api.client.FollowServiceClient
+import net.devh.boot.grpc.client.inject.GrpcClient
 import org.springframework.stereotype.Component
 
 @Component
 class FollowReaderImpl(
-    private val followServiceClient: FollowServiceClient,
+    @GrpcClient("local-grpc-server")
+    private val getFollowerServiceBlockingStub: GetFollowerServiceGrpc.GetFollowerServiceBlockingStub
 ) : FollowReader {
     override fun findAllFollower(followeeId: Long): List<Long> {
-        return followServiceClient.getFollowerList(followeeId)
+        val request = GetFollowerRequest.newBuilder()
+            .setUserId(followeeId)
+            .build()
+
+        return getFollowerServiceBlockingStub.getFollowerCall(request).userIdList
     }
 }
