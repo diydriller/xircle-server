@@ -10,3 +10,6 @@ spring:
 
 server:
   port: 9002
+grpc:
+  server:
+    port: 9092
