@@ -1,3 +1,5 @@
+import com.google.protobuf.gradle.*
+
 tasks.getByName("bootJar") {
     enabled = true
 }
@@ -6,9 +8,17 @@ tasks.getByName("jar") {
     enabled = false
 }
 
+plugins {
+    id("com.google.protobuf") version "0.9.4"
+}
+
 ext {
     set("springCloudVersion", "2023.0.3")
 }
+
+val grpcVersion = "3.19.4"
+val grpcKotlinVersion = "1.2.1"
+val grpcProtoVersion = "1.44.1"
 
 dependencies {
     implementation(project(":common"))
@@ -19,6 +29,10 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("io.grpc:grpc-protobuf:$grpcProtoVersion")
+    implementation("com.google.protobuf:protobuf-kotlin:$grpcVersion")
 }
 
 dependencyManagement {
@@ -29,4 +43,40 @@ dependencyManagement {
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
     imageName.set("diydriller/${rootProject.name}-${project.name}")
+}
+
+sourceSets {
+    getByName("main") {
+        java {
+            srcDirs(
+                "build/generated/source/proto/main/java",
+                "build/generated/source/proto/main/kotlin"
+            )
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$grpcVersion"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcProtoVersion"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk7@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("grpc")
+                id("grpckt")
+            }
+            it.builtins {
+                id("kotlin")
+            }
+        }
+    }
 }
