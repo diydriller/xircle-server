@@ -30,6 +30,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
+    implementation("net.devh:grpc-client-spring-boot-starter:2.15.0.RELEASE")
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation("io.grpc:grpc-protobuf:$grpcProtoVersion")
     implementation("com.google.protobuf:protobuf-kotlin:$grpcVersion")
