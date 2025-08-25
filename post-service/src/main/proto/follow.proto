@@ -7,11 +7,11 @@ option java_package = "com.xircle.followservice.application.grpc.proto";
 package com.xircle.followservice;
 
 message GetFollowerRequest {
-  int64 userId = 1;
+  string userId = 1;
 }
 
 message GetFollowerResponse {
-  repeated int64 userId = 1;
+  repeated string userId = 1;
 }
 
 service GetFollowerService {

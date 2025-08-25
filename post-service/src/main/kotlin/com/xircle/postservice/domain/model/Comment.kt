@@ -1,6 +1,7 @@
 package com.xircle.postservice.domain.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.github.f4b6a3.tsid.TsidCreator
 import jakarta.persistence.*
 
 @Entity
@@ -11,12 +12,12 @@ class Comment(
     val post: Post,
     var content: String,
     val depth: Int = 0,
-    val memberId: Long
+    @Column(name = "member_external_id")
+    val memberId: String
 ) : BaseEntity() {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    var id: Long? = null
+    val id: String = TsidCreator.getTsid().toString()
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")

@@ -39,6 +39,7 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation("io.grpc:grpc-protobuf:$grpcProtoVersion")
     implementation("com.google.protobuf:protobuf-kotlin:$grpcVersion")
+    implementation("com.github.f4b6a3:tsid-creator:5.2.6")
 }
 
 dependencyManagement {

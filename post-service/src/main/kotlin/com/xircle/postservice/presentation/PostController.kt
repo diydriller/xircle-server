@@ -20,7 +20,7 @@ class PostController(private val postService: PostService) {
     @PostMapping("/post", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun createPost(
         @Valid request: CreatePostRequest,
-        @RequestHeader memberId: Long
+        @RequestHeader memberId: String
     ): ResponseEntity<BaseResponse<Any>> {
         val postDto = CreatePostMapper.INSTANCE.covertToDto(request)
         postDto.memberId = memberId
@@ -33,12 +33,12 @@ class PostController(private val postService: PostService) {
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "10") size: Int,
         @Min(value = 1, message = "id must greater than 0")
-        @PathVariable memberId: Long
+        @PathVariable memberId: String
     ): ResponseEntity<BaseResponse<List<GetPostResponse>>> {
         val response = postService.getPostByMember(page, size, memberId).stream()
             .map { post ->
                 GetPostResponse(
-                    id = post.id!!,
+                    id = post.id,
                     title = post.title,
                     content = post.content,
                     postImgSrc = post.postImgSrc,
@@ -56,7 +56,7 @@ class PostController(private val postService: PostService) {
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "10") size: Int,
         @Min(value = 1, message = "id must greater than 0")
-        @PathVariable memberId: Long,
+        @PathVariable memberId: String,
         @NotEmpty(message = "hashtag is empty")
         @RequestParam(value = "interest") interest: String
     ): ResponseEntity<BaseResponse<List<GetProfilePostResponse>>> {
@@ -74,12 +74,12 @@ class PostController(private val postService: PostService) {
     fun getFollowPost(
         @RequestParam(name = "page", defaultValue = "0") page: Int,
         @RequestParam(name = "size", defaultValue = "10") size: Int,
-        @RequestHeader(name = "memberId") memberId: Long
+        @RequestHeader(name = "memberId") memberId: String
     ): ResponseEntity<BaseResponse<List<GetPostResponse>>> {
         val response = postService.getFollowPost(page, size, memberId).stream()
             .map { post ->
                 GetPostResponse(
-                    id = post.id!!,
+                    id = post.id,
                     title = post.title,
                     content = post.content,
                     postImgSrc = post.postImgSrc,
@@ -94,12 +94,12 @@ class PostController(private val postService: PostService) {
 
     @GetMapping("/top-commented")
     fun getTopCommentedPost(
-        @RequestHeader(name = "memberId") memberId: Long
+        @RequestHeader(name = "memberId") memberId: String
     ): ResponseEntity<BaseResponse<List<GetPostResponse>>> {
         val response = postService.getTopCommentedPost().stream()
             .map { post ->
                 GetPostResponse(
-                    id = post.id!!,
+                    id = post.id,
                     title = post.title,
                     content = post.content,
                     postImgSrc = post.postImgSrc,

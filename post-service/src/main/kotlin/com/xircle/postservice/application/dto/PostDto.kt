@@ -7,5 +7,5 @@ data class PostDto (
     val content: String,
     val hashtagList: List<String> = ArrayList(),
     val postImg: MultipartFile? = null,
-    var memberId: Long
+    var memberId: String
 )

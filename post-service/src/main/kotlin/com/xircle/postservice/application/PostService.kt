@@ -32,15 +32,15 @@ class PostService(
         return postStore.savePost(post)
     }
 
-    fun getPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
+    fun getPostByMember(page: Int, size: Int, memberId: String): List<Post> {
         return postReader.findAllPostByMember(page, size, memberId)
     }
 
-    fun getPostPreview(page: Int, size: Int, memberId: Long, interest: String): List<Post> {
+    fun getPostPreview(page: Int, size: Int, memberId: String, interest: String): List<Post> {
         return postReader.findAllPostByMemberInterest(page, size, memberId, interest)
     }
 
-    fun getFollowPost(page: Int, size: Int, memberId: Long): List<Post> {
+    fun getFollowPost(page: Int, size: Int, memberId: String): List<Post> {
         val followerIdList = followReader.findAllFollower(memberId)
         return postReader.findAllFollowPostByMember(page, size, followerIdList)
     }

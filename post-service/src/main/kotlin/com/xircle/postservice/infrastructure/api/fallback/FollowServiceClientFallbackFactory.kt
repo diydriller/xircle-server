@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class FollowServiceClientFallbackFactory : FallbackFactory<FollowServiceClient> {
     override fun create(cause: Throwable): FollowServiceClient {
         return object : FollowServiceClient {
-            override fun getFollowerList(memberId: Long): List<Long> {
+            override fun getFollowerList(memberId: String): List<String> {
                 return emptyList()
             }
         }

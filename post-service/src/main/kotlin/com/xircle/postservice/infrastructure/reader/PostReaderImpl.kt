@@ -14,17 +14,17 @@ import org.springframework.stereotype.Component
 class PostReaderImpl(
     private val postRepository: PostRepository,
 ) : PostReader {
-    override fun findAllPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
+    override fun findAllPostByMember(page: Int, size: Int, memberId: String): List<Post> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt")
         return postRepository.findPostByMember(memberId, pageable)
     }
 
-    override fun findAllPostByMemberInterest(page: Int, size: Int, memberId: Long, interest: String): List<Post> {
+    override fun findAllPostByMemberInterest(page: Int, size: Int, memberId: String, interest: String): List<Post> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt")
         return postRepository.findAllPostByMemberInterest(memberId, interest, pageable)
     }
 
-    override fun findAllFollowPostByMember(page: Int, size: Int, followerIdList: List<Long>): List<Post> {
+    override fun findAllFollowPostByMember(page: Int, size: Int, followerIdList: List<String>): List<Post> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt")
         return postRepository.findFollowPostByMember(followerIdList, pageable)
     }
@@ -33,7 +33,7 @@ class PostReaderImpl(
         return postRepository.findAllByIsDeletedAndIdIn(false, idList)
     }
 
-    override fun findById(postId: Long): Post {
+    override fun findById(postId: String): Post {
         return postRepository.findPostById(postId) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_POST)
     }
 
