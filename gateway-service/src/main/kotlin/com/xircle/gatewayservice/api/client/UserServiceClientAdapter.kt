@@ -12,7 +12,7 @@ class UserServiceClientAdapter(
     @GrpcClient("local-grpc-server")
     private val reactorGetMemberProfileServiceStub: ReactorGetMemberProfileServiceGrpc.ReactorGetMemberProfileServiceStub
 ) {
-    fun getMemberInfo(memberId: Long): Mono<MemberInfo> {
+    fun getMemberInfo(memberId: String): Mono<MemberInfo> {
         val request = GetMemberProfileRequest.newBuilder()
             .setUserId(memberId)
             .build()

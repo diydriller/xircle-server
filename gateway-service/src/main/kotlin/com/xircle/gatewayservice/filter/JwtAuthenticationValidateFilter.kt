@@ -42,12 +42,12 @@ class JwtAuthenticationValidateFilter(
                 tokenService.decodeToken(token)
             }
             .flatMap { decodedToken ->
-                val memberId = decodedToken.getClaim(CLAIM_ID).asLong()
-                userServiceClientAdapter.getMemberInfo(memberId.toLong())
+                val memberId = decodedToken.getClaim(CLAIM_ID).asString()
+                userServiceClientAdapter.getMemberInfo(memberId)
             }
             .flatMap { member ->
                 val modifiedRequest = exchange.request.mutate()
-                    .header(HEADER_NAME, member.id.toString())
+                    .header(HEADER_NAME, member.id)
                     .build()
                 val modifiedExchange = exchange.mutate()
                     .request(modifiedRequest)
