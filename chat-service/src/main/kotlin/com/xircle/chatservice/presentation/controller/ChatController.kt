@@ -26,7 +26,7 @@ class ChatController(
         val memberId = sessionManager.getUser(sessionId)
             ?: throw BaseException(BaseResponseStatus.NOT_AUTHENTICATION_ERROR)
 
-        val createChatRoomDto = CreateChatRoomMapper.INSTANCE.covertToDto(request, sessionId, memberId.toLong())
+        val createChatRoomDto = CreateChatRoomMapper.INSTANCE.covertToDto(request, sessionId, memberId)
 
         chatService.createRoom(createChatRoomDto)
     }

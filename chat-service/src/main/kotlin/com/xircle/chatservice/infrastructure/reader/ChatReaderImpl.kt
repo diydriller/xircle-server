@@ -22,12 +22,12 @@ class ChatReaderImpl(
     private val redisTemplate: StringRedisTemplate,
     private val mongoTemplate: MongoTemplate
 ) : ChatReader {
-    override fun findChatRoom(roomId: String, memberId: Long): ChatRoom {
+    override fun findChatRoom(roomId: String, memberId: String): ChatRoom {
         return chatRoomRepository.findByIdAndUserId(roomId, memberId)
             ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_CHAT_ROOM)
     }
 
-    override fun findReceiverDestination(receiverId: Long): String {
+    override fun findReceiverDestination(receiverId: String): String {
         return redisTemplate.opsForValue().get("member:${receiverId}:server")!!
     }
 
@@ -47,7 +47,7 @@ class ChatReaderImpl(
                     id = document.getObjectId("id").toHexString(),
                     message = document.getString("message"),
                     roomId = document.getString("roomId"),
-                    senderId = document.getLong("senderId")
+                    senderId = document.getString("senderId")
                 )
             }
     }
@@ -63,7 +63,7 @@ class ChatReaderImpl(
         return mongoTemplate.find(query, ChatMessage::class.java, "chat_message")
     }
 
-    override fun findAllChatRoom(memberId: Long, lastMessageId: String?, size: Int): List<ChatRoom> {
+    override fun findAllChatRoom(memberId: String, lastMessageId: String?, size: Int): List<ChatRoom> {
         val query = Query()
         query.addCriteria(Criteria.where("userId").`is`(memberId))
         lastMessageId?.let {
@@ -76,7 +76,7 @@ class ChatReaderImpl(
 
     override fun findAllUnreadChatMessageCountInEveryRoom(
         chatRoomList: List<ChatRoom>,
-        memberId: Long
+        memberId: String
     ): List<UnreadMessageCount> {
         val criteriaList = chatRoomList.map { chatRoom ->
             Criteria.where("room_id").`is`(chatRoom.id)

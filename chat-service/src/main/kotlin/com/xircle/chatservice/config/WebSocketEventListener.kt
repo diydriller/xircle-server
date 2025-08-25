@@ -34,7 +34,7 @@ class WebSocketEventListener(
         try {
             tokenService.verifyToken(token)
             val decodedToken = tokenService.decodeToken(token)
-            val memberId = decodedToken.getClaim("id").asLong()
+            val memberId = decodedToken.getClaim("id").toString()
 
             memberInfo = userServiceClient.getMemberInfo(memberId)
         } catch (_: Exception) {
@@ -42,7 +42,7 @@ class WebSocketEventListener(
         }
 
         val sessionId = accessor.sessionId!!
-        sessionManager.add(sessionId, memberInfo!!.id.toString())
+        sessionManager.add(sessionId, memberInfo!!.id)
 
         val serverId = InetAddress.getLocalHost().hostName
         val serverInstanceId = "$serverId.$serverPort"

@@ -43,7 +43,7 @@ class ChatService(
                 sessionId = createChatRoomDto.sessionId,
                 hostId = createChatRoomDto.hostId,
                 memberId = createChatRoomDto.memberId,
-                roomId = hostChatRoom.id!!,
+                roomId = hostChatRoom.id,
                 roomName = memberChatRoom.name
             )
         )
@@ -55,7 +55,7 @@ class ChatService(
         val chatRoom = chatReader.findChatRoom(sendChatMessageDto.roomId, sendChatMessageDto.senderId)
         val chatMessage = ChatMessage(
             message = sendChatMessageDto.message,
-            roomId = chatRoom.id!!,
+            roomId = chatRoom.id,
             senderId = sendChatMessageDto.senderId
         )
         chatStore.saveChatMessage(chatMessage)
@@ -69,13 +69,13 @@ class ChatService(
                 senderId = sendChatMessageDto.senderId,
                 message = sendChatMessageDto.message,
                 receiverId = sendChatMessageDto.receiverId,
-                chatMessageId = chatMessage.id!!
+                chatMessageId = chatMessage.id
             )
         )
 
         publisher.publishEvent(
             SendPrivateChatEvent(
-                id = chatMessage.id!!,
+                id = chatMessage.id,
                 roomId = sendChatMessageDto.roomId,
                 senderId = sendChatMessageDto.senderId,
                 message = sendChatMessageDto.message,
@@ -86,7 +86,7 @@ class ChatService(
         return chatMessage
     }
 
-    fun getChatRoom(memberId: Long, lastMessageId: String?, size: Int): List<GetChatRoomDto> {
+    fun getChatRoom(memberId: String, lastMessageId: String?, size: Int): List<GetChatRoomDto> {
         val chatRoomList = chatReader.findAllChatRoom(memberId, lastMessageId, size)
 
         val unreadChatMessageCountList =
@@ -101,7 +101,7 @@ class ChatService(
             val unreadChatMessageCount = unreadChatMessageCountMap[chatRoom.id]?.unreadCount ?: 0
 
             GetChatRoomDto(
-                roomId = chatRoom.id!!,
+                roomId = chatRoom.id,
                 name = chatRoom.name,
                 unreadCount = unreadChatMessageCount,
                 lastReadMessageId = chatRoom.lastReadMessageId,
@@ -131,7 +131,7 @@ class ChatService(
         }
     }
 
-    fun readChat(memberId: Long, roomId: String, lastReadMessageId: String) {
+    fun readChat(memberId: String, roomId: String, lastReadMessageId: String) {
         val chatRoom = chatReader.findChatRoom(roomId, memberId)
         chatRoom.lastReadMessageId = lastReadMessageId
         chatRoom.lastReadMessageTime = LocalDateTime.now()

@@ -17,6 +17,6 @@ interface CreateChatRoomMapper {
     fun covertToDto(
             createChatRoomRequest: CreateChatRoomRequest,
             sessionId: String,
-            hostId: Long
+            hostId: String
         ): CreateChatRoomDto
 }
