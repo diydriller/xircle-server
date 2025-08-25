@@ -2,6 +2,7 @@ package com.xircle.postservice.domain.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.github.f4b6a3.tsid.TsidCreator
 import jakarta.persistence.*
 import org.hibernate.annotations.BatchSize
 
@@ -9,13 +10,14 @@ import org.hibernate.annotations.BatchSize
 class Post(
     val content: String,
     val title: String,
+    @Column(name = "post_img_src")
     val postImgSrc: String,
-    val memberId: Long
+    @Column(name = "member_id")
+    val memberId: String
 ) : BaseEntity() {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    var id: Long? = null
+    val id: String = TsidCreator.getTsid().toString()
 
     @JsonManagedReference
     @BatchSize(size = 10)

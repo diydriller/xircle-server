@@ -15,8 +15,8 @@ class CommentController(
     @PostMapping("/post/{postId}/comment")
     fun createComment(
         @RequestBody request: CreateCommentRequest,
-        @PathVariable postId: Long,
-        @RequestHeader memberId: Long
+        @PathVariable postId: String,
+        @RequestHeader memberId: String
     ): BaseResponse<CommentResponse> {
         val commentDto = CreateCommentMapper.INSTANCE.covertToDto(request)
         val comment = commentService.createComment(postId, memberId, commentDto)
@@ -26,7 +26,7 @@ class CommentController(
 
     @GetMapping("/post/{postId}/comment")
     fun getComment(
-        @PathVariable postId: Long,
+        @PathVariable postId: String,
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int
     ): BaseResponse<List<CommentResponse>> {
@@ -37,10 +37,10 @@ class CommentController(
 
     @PostMapping("/post/{postId}/comment/{commentId}")
     fun createRecomment(
-        @PathVariable postId: Long,
-        @PathVariable commentId: Long,
+        @PathVariable postId: String,
+        @PathVariable commentId: String,
         @RequestBody request: CreateCommentRequest,
-        @RequestHeader memberId: Long
+        @RequestHeader memberId: String
     ): BaseResponse<CommentResponse> {
         val commentDto = CreateCommentMapper.INSTANCE.covertToDto(request)
         val comment = commentService.createRecomment(postId, commentId, memberId, commentDto)
@@ -50,8 +50,8 @@ class CommentController(
 
     @GetMapping("/post/{postId}/comment/{commentId}")
     fun getRecomment(
-        @PathVariable postId: Long,
-        @PathVariable commentId: Long,
+        @PathVariable postId: String,
+        @PathVariable commentId: String,
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int
     ): BaseResponse<List<CommentResponse>> {

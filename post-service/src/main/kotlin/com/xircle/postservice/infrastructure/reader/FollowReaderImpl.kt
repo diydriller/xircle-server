@@ -11,7 +11,7 @@ class FollowReaderImpl(
     @GrpcClient("local-grpc-server")
     private val getFollowerServiceBlockingStub: GetFollowerServiceGrpc.GetFollowerServiceBlockingStub
 ) : FollowReader {
-    override fun findAllFollower(followeeId: Long): List<Long> {
+    override fun findAllFollower(followeeId: String): List<String> {
         val request = GetFollowerRequest.newBuilder()
             .setUserId(followeeId)
             .build()

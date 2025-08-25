@@ -15,7 +15,7 @@ class CommentService(
     private val commentReader: CommentReader
 ) {
     @Transactional
-    fun createComment(postId: Long, memberId: Long, commentDto: CommentDto): Comment {
+    fun createComment(postId: String, memberId: String, commentDto: CommentDto): Comment {
         val post = postReader.findById(postId)
         val comment = Comment(
             post = post,
@@ -26,14 +26,14 @@ class CommentService(
         return savedComment
     }
 
-    fun getComment(page: Int, size: Int, postId: Long): List<Comment> {
+    fun getComment(page: Int, size: Int, postId: String): List<Comment> {
         val post = postReader.findById(postId)
         return commentReader.findAllCommentByPost(page, size, post)
     }
 
     @Transactional
-    fun createRecomment(postId: Long, commentId: Long, memberId: Long, commentDto: CommentDto): Comment {
-        val post = postReader.findById(postId)
+    fun createRecomment(postExternalId: String, commentId: String, memberId: String, commentDto: CommentDto): Comment {
+        val post = postReader.findById(postExternalId)
         val comment = commentReader.findById(commentId)
         val savedComment = comment.createRecomment(
             Comment(
@@ -46,7 +46,7 @@ class CommentService(
         return savedComment
     }
 
-    fun getRecomment(page: Int, size: Int, postId: Long, commentId: Long): List<Comment> {
+    fun getRecomment(page: Int, size: Int, postId: String, commentId: String): List<Comment> {
         postReader.findById(postId)
         val comment = commentReader.findById(commentId)
         return commentReader.findAllChildComment(page, size, comment)

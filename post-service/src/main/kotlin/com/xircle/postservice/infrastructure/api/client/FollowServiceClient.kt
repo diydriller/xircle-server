@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader
 interface FollowServiceClient {
     @GetMapping("/follow-service/follower")
     fun getFollowerList(
-        @RequestHeader("memberId") memberId: Long
-    ): List<Long>
+        @RequestHeader("memberId") memberId: String
+    ): List<String>
 }

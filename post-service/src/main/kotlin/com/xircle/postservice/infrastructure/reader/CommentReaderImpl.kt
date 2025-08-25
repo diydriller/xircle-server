@@ -20,7 +20,7 @@ class CommentReaderImpl(
         return commentRepository.findAllByPostAndDepth(post, 0, pageable)
     }
 
-    override fun findById(commentId: Long): Comment {
+    override fun findById(commentId: String): Comment {
         return commentRepository.findCommentById(commentId)
             ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_COMMENT)
     }
