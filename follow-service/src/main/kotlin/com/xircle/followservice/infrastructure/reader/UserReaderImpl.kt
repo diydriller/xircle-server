@@ -12,7 +12,7 @@ class UserReaderImpl(
     @GrpcClient("local-grpc-server")
     private val getMemberProfileServiceBlockingStub: GetMemberProfileServiceGrpc.GetMemberProfileServiceBlockingStub
 ) : UserReader {
-    override fun getMemberInfoList(memberIdList: List<Long>): List<MemberInfo> {
+    override fun getMemberInfoList(memberIdList: List<String>): List<MemberInfo> {
         val request = GetMemberProfileListRequest.newBuilder()
             .addAllUserId(memberIdList)
             .build()

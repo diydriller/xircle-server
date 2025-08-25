@@ -13,7 +13,7 @@ class FollowService(
     private val followReader: FollowReader,
     private val userReader: UserReader
 ) {
-    fun toggleFollowMember(followerId: Long, followeeId: Long): Boolean {
+    fun toggleFollowMember(followerId: String, followeeId: String): Boolean {
         if (followReader.existsFollowRelation(followerId, followeeId)) {
             followStore.unfollow(followerId, followeeId)
             return false
@@ -22,18 +22,18 @@ class FollowService(
         return true
     }
 
-    fun getFollower(followeeId: Long): List<MemberNode> {
+    fun getFollower(followeeId: String): List<MemberNode> {
         return followReader.findFollowerList(followeeId)
     }
 
-    fun createUserNode(userId: Long) {
+    fun createUserNode(userId: String) {
         if (followReader.existsMember(userId)) return
 
         val member = MemberNode(userId)
         followStore.saveMember(member)
     }
 
-    fun recommendFor(memberId: Long): List<MemberInfo> {
+    fun recommendFor(memberId: String): List<MemberInfo> {
         val memberIdList = followReader.recommendFollowerOfFollower(memberId).map { it.id }
         return userReader.getMemberInfoList(memberIdList)
     }

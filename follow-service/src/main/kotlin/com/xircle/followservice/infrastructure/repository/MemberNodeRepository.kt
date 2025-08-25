@@ -6,43 +6,43 @@ import org.springframework.data.neo4j.repository.query.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MemberNodeRepository : Neo4jRepository<MemberNode, Long> {
+interface MemberNodeRepository : Neo4jRepository<MemberNode, String> {
     @Query(
         "OPTIONAL MATCH (u:Member)-[:FOLLOWS]->(f:Member) " +
                 "WHERE u.id = \$followeeId " +
                 "RETURN DISTINCT f"
     )
-    fun findFollowerList(followeeId: Long): List<MemberNode>
+    fun findFollowerList(followeeId: String): List<MemberNode>
 
     @Query(
         "OPTIONAL MATCH (u:Member)<-[:FOLLOWS]-(f:Member) " +
                 "WHERE u.id = \$followerId " +
                 "RETURN DISTINCT f"
     )
-    fun findFolloweeList(followerId: Long): List<MemberNode>
+    fun findFolloweeList(followerId: String): List<MemberNode>
 
     @Query(
         "OPTIONAL MATCH (follower:Member {id: \$followerId})-[r:FOLLOWS]->(followee:Member {id: \$followeeId}) " +
                 "RETURN COUNT(r) > 0"
     )
-    fun existsFollowRelation(followerId: Long, followeeId: Long): Boolean
+    fun existsFollowRelation(followerId: String, followeeId: String): Boolean
 
     @Query(
         "OPTIONAL MATCH (follower:Member {id: \$followerId}), (followee:Member {id: \$followeeId}) " +
                 "MERGE (follower)-[:FOLLOWS]->(followee)"
     )
-    fun follow(followerId: Long, followeeId: Long)
+    fun follow(followerId: String, followeeId: String)
 
     @Query(
         "OPTIONAL MATCH (follower:Member {id: \$followerId})-[r:FOLLOWS]->(followee:Member {id: \$followeeId}) " +
                 "DELETE r"
     )
-    fun unfollow(followerId: Long, followeeId: Long)
+    fun unfollow(followerId: String, followeeId: String)
 
     @Query(
         "OPTIONAL MATCH (a:Member)-[:FOLLOWS]->(b:Member)-[:FOLLOWS]->(c:Member) " +
                 "WHERE a.id = \$memberId AND NOT (a)-[:FOLLOWS]->(c) AND a.id <> c.id " +
                 "RETURN DISTINCT c LIMIT 20"
     )
-    fun recommendFollowerOfFollower(memberId: Long): List<MemberNode>
+    fun recommendFollowerOfFollower(memberId: String): List<MemberNode>
 }

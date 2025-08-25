@@ -15,8 +15,8 @@ class FollowController(
     @PatchMapping("/follow/{memberId}")
     fun followMember(
         @Min(value = 1, message = "id must greater than 0")
-        @PathVariable(name = "memberId") followeeId: Long,
-        @RequestHeader(name = "memberId") followerId: Long
+        @PathVariable(name = "memberId") followeeId: String,
+        @RequestHeader(name = "memberId") followerId: String
     ): ResponseEntity<BaseResponse<Boolean>> {
         val isFollow = followService.toggleFollowMember(followerId, followeeId)
         return ResponseEntity.ok().body(BaseResponse(isFollow))
@@ -24,8 +24,8 @@ class FollowController(
 
     @GetMapping("/follower")
     fun getFollower(
-        @RequestHeader(name = "memberId") followeeId: Long
-    ): List<Long> {
+        @RequestHeader(name = "memberId") followeeId: String
+    ): List<String> {
         return followService.getFollower(followeeId)
             .map { memberNode ->
                 memberNode.id
@@ -34,7 +34,7 @@ class FollowController(
 
     @GetMapping("/following-of-following/{memberId}")
     fun getRecommendation(
-        @PathVariable(name = "memberId") memberId: Long,
+        @PathVariable(name = "memberId") memberId: String,
     ): ResponseEntity<BaseResponse<List<MemberInfo>>> {
         val memberInfoList = followService.recommendFor(memberId)
         return ResponseEntity.ok().body(BaseResponse(memberInfoList))

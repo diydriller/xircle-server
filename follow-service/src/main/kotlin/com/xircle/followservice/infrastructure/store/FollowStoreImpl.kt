@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component
 class FollowStoreImpl(
     private val memberNodeRepository: MemberNodeRepository
 ) : FollowStore {
-    override fun follow(followerId: Long, followeeId: Long) {
+    override fun follow(followerId: String, followeeId: String) {
         memberNodeRepository.follow(followerId, followeeId)
     }
 
-    override fun unfollow(followerId: Long, followeeId: Long) {
+    override fun unfollow(followerId: String, followeeId: String) {
         memberNodeRepository.unfollow(followerId, followeeId)
     }
 

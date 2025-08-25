@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(name = "user-service", fallback = UserServiceClientFallbackFactory::class)
 interface UserServiceClient {
     @GetMapping("/user-service/member/info")
-    fun getMemberInfoList(@RequestParam memberIdList: List<Long>): List<MemberInfo>
+    fun getMemberInfoList(@RequestParam memberIdList: List<String>): List<MemberInfo>
 }
