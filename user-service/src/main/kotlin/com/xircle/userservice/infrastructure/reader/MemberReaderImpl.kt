@@ -28,23 +28,23 @@ class MemberReaderImpl(
         }
     }
 
-    override fun findMemberByIdListIn(memberIdList: List<Long>): List<Member> {
+    override fun findMemberByIdListIn(memberIdList: List<String>): List<Member> {
         return memberRepository.findMemberByIdListIn(memberIdList)
     }
 
-    override fun findMemberById(id: Long): Member {
-        return memberRepository.findMemberById(id) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_EMAIL)
+    override fun findMemberById(memberId: String): Member {
+        return memberRepository.findMemberById(memberId) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_EMAIL)
     }
 
     override fun findMemberByCondition(
         page: Int,
         size: Int,
-        userId: Long,
+        memberId: String,
         memberSearchCondition: MemberSearchCondition
     ): List<Member> {
         val pageable: Pageable = PageRequest.of(page, size)
         val searchSpecification = listOfNotNull(
-            MemberSpecification.notEqualId(userId),
+            MemberSpecification.notEqualId(memberId),
             MemberSpecification.equalAge(memberSearchCondition.age),
             MemberSpecification.equalUniversity(memberSearchCondition.university),
             MemberSpecification.equalGender(memberSearchCondition.gender)
@@ -52,7 +52,7 @@ class MemberReaderImpl(
         return memberRepository.findAll(searchSpecification ?: Specification.where(null), pageable).toList()
     }
 
-    override fun findMemberProfileById(memberId: Long): Member {
+    override fun findMemberProfileById(memberId: String): Member {
         return memberRepository.findMemberProfileById(memberId)
             ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_MEMBER)
     }

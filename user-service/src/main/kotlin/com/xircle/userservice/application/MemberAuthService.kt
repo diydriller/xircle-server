@@ -52,7 +52,7 @@ class MemberAuthService(
             member.addInterest(Interest(it))
         }
         memberStore.saveMember(member)
-        eventPublisher.publishEvent(UserCreationEventDto(member.id!!))
+        eventPublisher.publishEvent(UserCreationEventDto(member.id))
     }
 
     @Transactional

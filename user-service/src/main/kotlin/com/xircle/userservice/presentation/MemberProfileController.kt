@@ -28,13 +28,13 @@ class MemberProfileController(
         @RequestParam(value = "university", required = false) university: String?,
         @Pattern(regexp = "^(남자|여자)$", message = "gender must be either 남자 or 여자")
         @RequestParam(value = "gender", required = false) gender: String?,
-        @RequestHeader memberId: Long
+        @RequestHeader memberId: String
     ): ResponseEntity<BaseResponse<List<MemberSearchResponse>>> {
         val searchCondition = MemberSearchCondition(age, university, gender)
         val searchMemberResponseList =
             memberProfileService.searchMember(page, size, memberId, searchCondition)
                 .map {
-                    MemberSearchResponse(it.id as Long, it.nickname)
+                    MemberSearchResponse(it.id, it.nickname)
                 }
         return ResponseEntity.ok().body(BaseResponse(searchMemberResponseList))
     }
@@ -42,7 +42,7 @@ class MemberProfileController(
     @GetMapping("/profile/member/{memberId}")
     fun getMemberProfile(
         @Min(value = 1, message = "id must greater than 0")
-        @PathVariable memberId: Long,
+        @PathVariable memberId: String,
     ): ResponseEntity<BaseResponse<MemberProfile>> {
         val member = memberProfileService.getMemberProfile(memberId)
         val memberProfile = MemberProfile(
@@ -71,11 +71,11 @@ class MemberProfileController(
 
     @GetMapping("/member/{memberId}/info")
     fun getMemberInfo(
-        @PathVariable memberId: Long
+        @PathVariable memberId: String
     ): MemberInfo {
         val member = memberReader.findMemberById(memberId)
         return MemberInfo(
-            id = member.id!!,
+            id = member.id,
             email = member.email,
             nickname = member.nickname,
             profileImage = member.profileImage
@@ -84,11 +84,11 @@ class MemberProfileController(
 
     @GetMapping("/member/info")
     fun getMemberInfoList(
-        @RequestParam memberIdList: List<Long>
+        @RequestParam memberIdList: List<String>
     ): List<MemberInfo> {
         return memberReader.findMemberByIdListIn(memberIdList).map { member ->
             MemberInfo(
-                id = member.id!!,
+                id = member.id,
                 email = member.email,
                 nickname = member.nickname,
                 profileImage = member.profileImage

@@ -4,15 +4,15 @@ import com.xircle.userservice.domain.model.Member
 import com.xircle.userservice.domain.query.MemberSearchCondition
 
 interface MemberReader {
-    fun findMemberById(id: Long): Member
+    fun findMemberById(memberId: String): Member
     fun findMemberByCondition(
         page: Int,
         size: Int,
-        userId: Long,
+        memberId: String,
         memberSearchCondition: MemberSearchCondition
     ): List<Member>
-    fun findMemberProfileById(memberId: Long): Member
+    fun findMemberProfileById(memberId: String): Member
     fun findMemberByEmail(email: String): Member
     fun isExistMemberByEmail(email: String)
-    fun findMemberByIdListIn(memberIdList: List<Long>): List<Member>
+    fun findMemberByIdListIn(memberIdList: List<String>): List<Member>
 }
