@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class UserServiceClientFallbackFactory : FallbackFactory<UserServiceClient> {
     override fun create(cause: Throwable): UserServiceClient {
         return object : UserServiceClient {
-            override fun getMemberInfo(memberId: Long): MemberInfo? {
+            override fun getMemberInfo(memberId: String): MemberInfo? {
                 return null
             }
         }

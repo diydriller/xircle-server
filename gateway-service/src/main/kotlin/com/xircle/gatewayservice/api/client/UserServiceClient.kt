@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable
 @FeignClient(name = "user-service", fallback = UserServiceClientFallbackFactory::class)
 interface UserServiceClient {
     @GetMapping("/user-service/member/{memberId}/info")
-    fun getMemberInfo(@PathVariable("memberId") memberId: Long): MemberInfo?
+    fun getMemberInfo(@PathVariable("memberId") memberId: String): MemberInfo?
 }

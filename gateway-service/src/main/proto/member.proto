@@ -7,7 +7,7 @@ option java_package = "com.xircle.userservice.application.grpc.proto";
 package com.xircle.userservice;
 
 message GetMemberProfileListRequest {
-  repeated int64 userId = 1;
+  repeated string userId = 1;
 }
 
 message GetMemberProfileListResponse {
@@ -15,14 +15,14 @@ message GetMemberProfileListResponse {
 }
 
 message GetMemberProfileInfo {
-  int64 id = 1;
+  string id = 1;
   string email = 2;
   string profileImage = 3;
   string nickname = 4;
 }
 
 message GetMemberProfileRequest {
-  int64 userId = 1;
+  string userId = 1;
 }
 
 message GetMemberProfileResponse {
