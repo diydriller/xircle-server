@@ -5,14 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Query
 
-interface MemberRepository : JpaRepository<Member, Long>, JpaSpecificationExecutor<Member> {
+interface MemberRepository : JpaRepository<Member, String>, JpaSpecificationExecutor<Member> {
     fun findMemberByEmail(email: String): Member?
 
-    fun findMemberById(id: Long): Member?
+    fun findMemberById(id: String): Member?
 
     @Query("SELECT DISTINCT m FROM Member m JOIN FETCH m.interestList WHERE m.id = :id")
-    fun findMemberProfileById(id: Long): Member?
+    fun findMemberProfileById(id: String): Member?
 
     @Query("SELECT m FROM Member m WHERE m.id IN :memberIdList ")
-    fun findMemberByIdListIn(memberIdList: List<Long>): List<Member>
+    fun findMemberByIdListIn(memberIdList: List<String>): List<Member>
 }

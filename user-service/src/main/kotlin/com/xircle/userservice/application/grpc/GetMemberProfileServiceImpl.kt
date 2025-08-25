@@ -16,7 +16,7 @@ class GetMemberProfileServiceImpl(
         val memberInfoList = memberReader.findMemberByIdListIn(request.userIdList).map { member ->
             GetMemberProfileInfo.newBuilder()
                 .setProfileImage(member.profileImage)
-                .setId(member.id!!)
+                .setId(member.id)
                 .setNickname(member.nickname)
                 .setEmail(member.email)
                 .build()
@@ -37,7 +37,7 @@ class GetMemberProfileServiceImpl(
         val member = memberReader.findMemberById(request.userId)
         val memberInfo = GetMemberProfileInfo.newBuilder()
             .setProfileImage(member.profileImage)
-            .setId(member.id!!)
+            .setId(member.id)
             .setNickname(member.nickname)
             .setEmail(member.email)
             .build()

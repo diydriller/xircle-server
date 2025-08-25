@@ -23,9 +23,9 @@ class MemberSpecification {
             }
         }
 
-        fun notEqualId(id: Long): Specification<Member> {
+        fun notEqualId(id: String): Specification<Member> {
             return Specification { root, _, cb ->
-                cb.notEqual(root.get<Long>("id"), id)
+                cb.notEqual(root.get<String>("id"), id)
             }
         }
     }

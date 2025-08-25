@@ -11,12 +11,17 @@ class MemberProfileService(
     private val memberReader: MemberReader
 ) {
     @Transactional
-    fun searchMember(page: Int, size: Int, userId: Long, memberSearchCondition: MemberSearchCondition): List<Member> {
-        return memberReader.findMemberByCondition(page, size, userId, memberSearchCondition)
+    fun searchMember(
+        page: Int,
+        size: Int,
+        memberId: String,
+        memberSearchCondition: MemberSearchCondition
+    ): List<Member> {
+        return memberReader.findMemberByCondition(page, size, memberId, memberSearchCondition)
     }
 
     @Transactional
-    fun getMemberProfile(memberId: Long): Member {
+    fun getMemberProfile(memberId: String): Member {
         return memberReader.findMemberProfileById(memberId)
     }
 }

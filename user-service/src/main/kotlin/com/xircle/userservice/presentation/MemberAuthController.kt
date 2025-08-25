@@ -36,7 +36,7 @@ class MemberAuthController(
         @RequestBody @Valid request: LoginRequest
     ): ResponseEntity<BaseResponse<LoginResponse>> {
         val member = memberAuthService.login(request.email, request.password)
-        val token = tokenService.createAccessToken(member.id!!)
+        val token = tokenService.createAccessToken(member.id)
         val response = LoginResponse(token)
         return ResponseEntity.ok().body(BaseResponse(response))
     }

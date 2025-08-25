@@ -22,7 +22,7 @@ class TokenService(
         return decode(jwtToken)
     }
 
-    fun createAccessToken(id: Long): String {
+    fun createAccessToken(id: String): String {
         return JWT.create()
             .withClaim("id", id)
             .withExpiresAt(Date(System.currentTimeMillis() + ACCESS_TOKEN_DURATION))

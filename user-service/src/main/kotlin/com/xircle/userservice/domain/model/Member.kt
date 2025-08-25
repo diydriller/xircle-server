@@ -1,5 +1,6 @@
 package com.xircle.userservice.domain.model
 
+import com.github.f4b6a3.tsid.TsidCreator
 import jakarta.persistence.*
 import java.io.Serializable
 
@@ -34,9 +35,8 @@ class Member(
     var role: MemberRole
 ) : BaseEntity(), Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    var id: Long? = null
+    val id: String = TsidCreator.getTsid().toString()
 
     @OneToMany(mappedBy = "member", cascade = [CascadeType.PERSIST])
     var interestList: MutableList<Interest> = ArrayList()

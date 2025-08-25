@@ -1,6 +1,6 @@
 package com.xircle.userservice.presentation.dto
 
 data class MemberSearchResponse(
-    val id: Long,
+    val id: String,
     val displayName: String
 )
