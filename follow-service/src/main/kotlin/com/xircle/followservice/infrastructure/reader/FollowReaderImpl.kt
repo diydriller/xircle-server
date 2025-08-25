@@ -9,23 +9,23 @@ import org.springframework.stereotype.Component
 class FollowReaderImpl(
     private val memberNodeRepository: MemberNodeRepository
 ) : FollowReader {
-    override fun findFollowerList(followeeId: Long): List<MemberNode> {
+    override fun findFollowerList(followeeId: String): List<MemberNode> {
         return memberNodeRepository.findFollowerList(followeeId)
     }
 
-    override fun findFolloweeList(followerId: Long): List<MemberNode> {
+    override fun findFolloweeList(followerId: String): List<MemberNode> {
         return memberNodeRepository.findFolloweeList(followerId)
     }
 
-    override fun existsFollowRelation(followerId: Long, followeeId: Long): Boolean {
+    override fun existsFollowRelation(followerId: String, followeeId: String): Boolean {
         return memberNodeRepository.existsFollowRelation(followerId, followeeId)
     }
 
-    override fun existsMember(memberId: Long): Boolean {
+    override fun existsMember(memberId: String): Boolean {
         return memberNodeRepository.existsById(memberId)
     }
 
-    override fun recommendFollowerOfFollower(memberId: Long): List<MemberNode> {
+    override fun recommendFollowerOfFollower(memberId: String): List<MemberNode> {
         return memberNodeRepository.recommendFollowerOfFollower(memberId)
     }
 }
