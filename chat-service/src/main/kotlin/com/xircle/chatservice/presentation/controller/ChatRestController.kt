@@ -17,7 +17,7 @@ class ChatRestController(
 ) {
     @GetMapping("/room")
     fun getChatRoom(
-        @RequestHeader memberId: Long,
+        @RequestHeader memberId: String,
         @RequestParam lastMessageId: String?,
         @RequestParam(defaultValue = "10") size: Int
     ): ResponseEntity<BaseResponse<List<GetChatRoomResponse>>> {
@@ -39,7 +39,7 @@ class ChatRestController(
 
     @PutMapping("/room/{roomId}/chat/read")
     fun readChat(
-        @RequestHeader memberId: Long,
+        @RequestHeader memberId: String,
         @PathVariable roomId: String,
         @RequestParam lastReadMessageId: String
     ): ResponseEntity<BaseResponse<Unit>> {

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ChatRoomRepository : MongoRepository<ChatRoom, String> {
-    fun findByIdAndUserId(roomId: String, memberId: Long): ChatRoom?
+    fun findByIdAndUserId(roomId: String, memberId: String): ChatRoom?
 }

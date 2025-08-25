@@ -25,6 +25,7 @@ dependencies {
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.kafka:spring-kafka")
+    implementation("com.github.f4b6a3:tsid-creator:5.2.6")
 }
 
 dependencyManagement {
@@ -32,3 +33,4 @@ dependencyManagement {
         mavenBom ("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
     }
 }
+
