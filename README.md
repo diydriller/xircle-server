@@ -4,3 +4,5 @@
 
 ## 이슈
 * [gRPC 사용](https://develop-think-record.tistory.com/28)
+* [TSID 사용](https://develop-think-record.tistory.com/29)
+* [PER 알고리즘 사용](https://develop-think-record.tistory.com/33)
