@@ -1,0 +1,64 @@
+name: xircle server CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew :discovery-service:build 
+          ./gradlew :config-service:build 
+          ./gradlew :gateway-service:build 
+          ./gradlew :user-service:build 
+          ./gradlew :post-service:build 
+          ./gradlew :follow-service:build 
+          ./gradlew :chat-service:build 
+          ./gradlew :outbox-service:build 
+
+      - name: Make Directory
+        run: mkdir -p xircle
+
+      - name: Prepare Deployment Directory
+        run: |
+          cp ./discovery-service/build/libs/*.jar ./xircle
+          cp ./config-service/build/libs/*.jar ./xircle
+          cp ./gateway-service/build/libs/*.jar ./xircle
+          cp ./user-service/build/libs/*.jar ./xircle
+          cp ./post-service/build/libs/*.jar ./xircle
+          cp ./follow-service/build/libs/*.jar ./xircle
+          cp ./chat-service/build/libs/*.jar ./xircle
+          cp ./outbox-service/build/libs/*.jar ./xircle
+          cp appspec.yml ./xircle
+          cp ./scripts/*.sh ./xircle
+
+      - name: Make zip file
+        run: zip -r ./xircle.zip ./xircle
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./xircle.zip s3://${{ secrets.AWS_S3_BUCKET_NAME }}
